@@ -1,0 +1,15 @@
+repos:
+- repo: https://github.com/qoomon/git-conventional-commits
+  rev: v2.6.7
+  hooks:
+    - id: conventional-commits
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.1.0  # this is optional, use `pre-commit autoupdate` to get the latest rev!
+    hooks:
+      -   id: check-yaml
+      -   id: check-xml
+      -   id: check-json
+      -   id: check_executables_have_shebangs
+      -   id: detect_private_key
+      -   id: end_of_file_fixer
+      -   id: trailing-whitespace

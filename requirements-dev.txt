@@ -1,0 +1,6 @@
+flake8
+black
+pylint
+isort
+tox
+bandit
