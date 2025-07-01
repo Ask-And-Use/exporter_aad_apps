@@ -1,0 +1,17 @@
+[Unit]
+Description=Prometheus Azure AD Application Monitor
+Documentation=https://github.com/Ask-And-Use/exporter_aad_apps
+
+[Service]
+Restart=on-failure
+EnvironmentFile=/etc/default/prometheus-aad-app-exporter
+WorkingDirectory=/srv/exporter_aad_app/venv{{ python_version }}/
+ExecStart=/srv/exporter_aad_app/venv{{ python_version }}/bin/python /srv/exporter_aad_app/exporter_aad_app.py $ARGS
+ExecReload=/bin/kill -HUP $MAINPID
+TimeoutStopSec=20s
+SendSIGKILL=no
+StandardOutput=file:/var/log/prometheus-aad-app-exporter.log
+StandardError=file:/var/log/prometheus-aad-app-exporter.log
+
+[Install]
+WantedBy=multi-user.target

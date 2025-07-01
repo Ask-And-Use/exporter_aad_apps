@@ -1,0 +1,69 @@
+- name: Azure AD Application Monitor
+  hosts: Prometheus
+  vars_files:
+    - ../../../common-variables.yaml
+    - variables.yaml
+  tasks:
+    - name: Setup requirement packages
+      ansible.builtin.apt:
+        pkg:
+          - python3-venv
+        state: latest
+        clean: true
+        autoclean: true
+        autoremove: true
+        update_cache: true
+      register: apt_status
+      until: apt_status is success
+      delay: 10
+      retries: 3
+
+    - name: Create directory
+      ansible.builtin.file:
+        dest: "/srv/exporter_aad_app/"
+        mode: u=rwX,g=rwX,o=rX
+        state: directory
+        owner: root
+        group: root
+        recurse: true
+
+    - name: Git clone
+      ansible.builtin.git:
+        repo: "https://github.com/Ask-And-Use/exporter_aad_apps.git"
+        dest: "/srv/exporter_aad_app/"
+        accept_hostkey: true
+        update: true
+        single_branch: true
+        force: true
+        version: main
+
+    - name: Create Virtual environment
+      ansible.builtin.pip:
+        requirements: /srv/exporter_aad_app/requirements.txt
+        virtualenv: "/srv/exporter_aad_app/venv{{ python_version }}"
+        virtualenv_command: "/usr/bin/python{{ python_version }} -m venv"
+        state: "present"
+
+    - name: Copy default.j2 file
+      ansible.builtin.template:
+        src: "files/default.j2"
+        owner: root
+        group: root
+        mode: u=rw,g=r,o=r
+        dest: "/etc/default/prometheus-aad-app-exporter"
+
+    - name: Service daemon configuration
+      ansible.builtin.template:
+        src: files/service_systemd.j2
+        owner: root
+        group: root
+        mode: u=rw
+        dest: "/etc/systemd/system/prometheus-aad-app-exporter.service"
+
+    - name: Enable and start service
+      ansible.builtin.systemd_service:
+        name: prometheus-aad-app-exporter.service
+        masked: false
+        enabled: true
+        daemon_reload: true
+        state: restarted
