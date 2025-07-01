@@ -34,7 +34,7 @@ Options:
     -s, --secret        Client secret for authentication
     -p, --port          Port to run Prometheus HTTP server (default: 5001)
     -l, --listen        Address to listen on (default: 0.0.0.0)
-    -t, --timeout       HTTP request timeout in seconds (default: 10)
+        --timeout       HTTP request timeout in seconds (default: 10)
     -v, --verbose       Enable verbose output
 ```
 

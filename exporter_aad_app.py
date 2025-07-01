@@ -22,7 +22,7 @@ Options:
     -s, --secret        Client secret for authentication
     -p, --port          Port to run Prometheus HTTP server (default: 5001)
     -l, --listen        Address to listen on (default: 0.0.0.0)
-    -t, --timeout       HTTP request timeout in seconds (default: 10)
+        --timeout       HTTP request timeout in seconds (default: 10)
     -v, --verbose       Enable verbose output
 
 Metrics:
@@ -75,7 +75,7 @@ def usage():
     print("    -s, --secret        Client secret for authentication")
     print("    -p, --port          Port to run Prometheus HTTP server (default: 5001)")
     print("    -l, --listen        Address to listen on (default: 0.0.0.0)")
-    print("    -t, --timeout       HTTP request timeout in seconds (default: 10)")
+    print("        --timeout       HTTP request timeout in seconds (default: 10)")
     print("    -v, --verbose       Enable verbose output")
     sys_exit(2)
 
@@ -223,7 +223,7 @@ if __name__ == "__main__":
                 port = int(arg)
             elif opt in ("-l", "--listen"):
                 listen = str(arg)
-            elif opt in ("-t", "--timeout"):
+            elif opt in ("--timeout"):
                 config["timeout"] = int(arg)
             elif opt in ("-v", "--verbose"):
                 config["verbose"] = True
