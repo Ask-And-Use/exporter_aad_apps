@@ -78,15 +78,16 @@ azure_app_credential_days_remaining{app_id="4377aec6-8850-4505-b330-89303c4b3fab
 
 # Prometheus Scraping
 
-```yml
+```yaml
   - job_name: 'aad_app_exporter'
+    scrape_interval: 600s
+    scrape_timeout: 60s
+    metrics_path: /metrics
     scheme: http
     static_configs:
-      - targets: ['127.0.0.1:5001']      
+      - targets: ['127.0.0.1:5001']
 ```    
 
 # Grafana Dashboard
 
-```
-WIP
-```
+You should import the grafana_dahsboard.json file inside the deployement folders
