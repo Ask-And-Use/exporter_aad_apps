@@ -104,7 +104,7 @@ class SimpleHandler(BaseHTTPRequestHandler):
         self.monitor_aad_applications()
         self.send_response(200)
         self.send_header("Content-Type", "text/plain; version=0.0.4; charset=utf-8")
-        # self.end_headers()
+        self.end_headers()
         self.wfile.write(generate_latest())
 
     @enforce_types
