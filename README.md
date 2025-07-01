@@ -76,6 +76,15 @@ azure_app_credential_days_remaining{app_id="750104c9-86b4-4c8b-8d55-9f47b4b45639
 azure_app_credential_days_remaining{app_id="4377aec6-8850-4505-b330-89303c4b3fab",app_name="Backup-Service-Cloud",credential_id="bf11d5bb-33b9-4916-a9f9-cb526f5256fd"} -125.63031161242071
 ```
 
+# Prometheus Scraping
+
+```yml
+  - job_name: 'aad_app_exporter'
+    scheme: http
+    static_configs:
+      - targets: ['127.0.0.1:5001']      
+```    
+
 # Grafana Dashboard
 
 ```
