@@ -50,7 +50,7 @@ from prometheus_client import Gauge, generate_latest
 app_credential_days_remaining = Gauge(
     "azure_app_credential_days_remaining",
     "Number of days remaining before Azure application credential expires",
-    ["app_name", "app_id", "credential_id"],
+    ["app_name", "app_id", "credential_id", "credential_name"],
 )
 
 
@@ -90,7 +90,7 @@ class SimpleHandler(BaseHTTPRequestHandler):
     API. These include expiration statuses of credentials associated with Azure AD applications.
     """
 
-    def do_GET(self) -> NoReturn:
+    def do_GET(self) -> NoReturn:  # pylint: disable=invalid-name
         """
         Handles HTTP GET requests and provides metrics response in plain text format.
 
@@ -102,11 +102,12 @@ class SimpleHandler(BaseHTTPRequestHandler):
         """
 
         self.monitor_aad_applications()
-        self.send_response(200)
+        self.send_response(200)  # pylint: disable=unreachable
         self.send_header("Content-Type", "text/plain; version=0.0.4; charset=utf-8")
         self.end_headers()
         self.wfile.write(generate_latest())
 
+    # pylint: disable=possibly-used-before-assignment
     @enforce_types
     def monitor_aad_applications(self) -> NoReturn:
         """
@@ -161,6 +162,7 @@ class SimpleHandler(BaseHTTPRequestHandler):
                             app_name=app.get("displayName", "unknown"),
                             app_id=app.get("appId", "unknown"),
                             credential_id=cred.get("keyId", "unknown"),
+                            credential_name=cred.get("displayName", "unknown"),
                         ).set(remaining_days)
 
                         if config["verbose"]:
@@ -169,7 +171,6 @@ class SimpleHandler(BaseHTTPRequestHandler):
                                     'displayName', 'unknown'
                                 )} [{app.get('appId', 'unknown')}] => {remaining_days:.0f} days"
                             )
-                        break
 
         except Exception as e:
             print(str(e))
@@ -222,7 +223,7 @@ if __name__ == "__main__":
             elif opt in ("-p", "--port"):
                 port = int(arg)
             elif opt in ("-l", "--listen"):
-                listen = str(arg)
+                listen = str(arg)  # pylint: disable=invalid-name
             elif opt in ("--timeout"):
                 config["timeout"] = int(arg)
             elif opt in ("-v", "--verbose"):
